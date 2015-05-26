@@ -1,0 +1,304 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+<meta content="telephone=no" name="format-detection" />
+<meta name="apple-touch-fullscreen" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<title> 刘丹生日快乐 </title>
+<link href="css/card.css" type="text/css" rel="stylesheet">
+</head>
+
+<body>
+<div class="cantainer">
+    <div class="line1"></div>
+    <div class="line2"></div>
+    <div class="line3"></div>
+    <div class="line4"></div>
+    <div class="line5"></div>
+    <div class="line6"></div>
+    <div class="line7"></div>
+    <div class="line8"></div>
+
+    <div class="topic">
+        Happy Birthday
+    </div>
+</div>
+
+<div class="footer">
+    <div class="cake">
+        &nbsp;
+    </div>
+    <div class="icon_fire" id="playFire">
+        &nbsp;
+    </div>
+    &nbsp;
+</div>
+
+<!-- <video id="bgaudio" loop>
+    <source src="mp3/movie.mp4" type="video/mp4" />
+</video> -->
+
+<script type="text/javascript" src="script/zepto.js"></script>
+<script type="text/javascript">
+var postArr=[
+    {
+        "posX":274,
+        "posY":10,
+        "color":"r",
+        "scale":.8,
+        "opacity":1
+    },
+    {
+        "posX":80,
+        "posY":14,
+        "color":"y",
+        "scale":.7,
+        "opacity":1
+    },
+    {
+        "posX":52,
+        "posY":75,
+        "color":"r",
+        "scale":.5,
+        "opacity":1
+    },
+    {
+        "posX":230,
+        "posY":110,
+        "color":"y",
+        "scale":.5,
+        "opacity":1
+    },
+    {
+        "posX":34,
+        "posY":285,
+        "color":"r",
+        "scale":.8,
+        "opacity":1
+    },
+    {
+        "posX":64,
+        "posY":465,
+        "color":"y",
+        "scale":.8,
+        "opacity":1
+    },
+    {
+        "posX":248,
+        "posY":495,
+        "color":"r",
+        "scale":.7,
+        "opacity":1
+    },
+    {
+        "posX":0,
+        "posY":510,
+        "color":"y",
+        "scale":1,
+        "opacity":1
+    },
+    {
+        "posX":232,
+        "posY":594,
+        "color":"y",
+        "scale":.5,
+        "opacity":1
+    }
+]
+
+
+var urlQuery=function(name){
+    var href = location.search;
+    href = href.replace(/#[^&]*$/,'');
+    var _index = href.indexOf(name+"=");
+    if(_index != -1){
+        var a = href.substr(_index),b = new Array();
+        if(a.indexOf("&") == -1){
+            b = a.split("=");
+        }
+        else{
+            b = a.substr(0,a.indexOf("&")).split("=");
+        }
+
+        var str="";
+        $.each(b, function (i,n) {
+            if (i>0) {
+                if(n=="") {
+                    str=str+"=";
+                } else {
+                    str=str+n
+                }
+            };
+        })
+        return decodeURIComponent(str);
+    }
+    else{
+        return "";
+    }
+}
+
+window.onload=function () {
+var bodyDom=$('body');
+    var startDom=[];
+    var screenW=$(window).width();
+    var screenH=$(window).height();
+    var scrollTop=0;
+    var scrollStep=0;
+
+    if (screenW<375) {
+        scrollStep=30;
+    } else if (screenW<414) {
+        scrollStep=38;
+    } else if (screenW<480) {
+        scrollStep=44;
+    } else {
+        scrollStep=50;
+    };
+
+    // star
+    $.each(postArr, function (i,n) {
+        var newX=parseInt(n.posX/320*screenW);
+        var newY=parseInt(n.posY/568*screenH);
+
+        startDom[i]=$('<span>&nbsp;</span>')
+        startDom[i].addClass('start start_'+n.color).css({'left':newX+'px','top':newY+'px','opacity':n.opacity, '-webkit-transform':'scale('+n.scale+','+n.scale+')'});
+        bodyDom.append(startDom[i]);
+
+        var flag=Math.random()>=.5?1:0;
+        var delayTime=parseInt(Math.random()*2000);
+        if (delayTime<400) {
+            delayTime=400;
+        } else if (delayTime>700) {
+            delayTime=700;
+        };
+        var minScale=n.scale*100-20;
+        var maxScale=n.scale*100+20>100?100:n.scale*100+20;
+
+        if (flag) {
+            startDom[i].css({'-webkit-animation':'startF'+maxScale+'T'+minScale+' '+delayTime+'ms '+delayTime+'ms infinite ease-in-out'});
+        } else {
+            startDom[i].css({'-webkit-animation':'startF'+minScale+'T'+maxScale+' '+delayTime+'ms '+delayTime+'ms infinite ease-in-out'});
+        };
+    })
+
+    //input msg
+    var enterTextDelay=200;
+    var enterText=function (str, objName, callback) {
+        var htmlCode=$('.'+objName).html();
+        htmlCode=htmlCode.replace("_","");
+        var curPos=htmlCode==""?0:htmlCode.length;
+        var curStr=str.substr(curPos,1);
+        if (htmlCode.length+1 == str.length) {
+            $('.'+objName).html(htmlCode+curStr);
+            callback && callback();
+
+            scrollTop=scrollTop+scrollStep;
+            $(window).scrollTop(scrollTop);
+
+        } else {
+            $('.'+objName).html(htmlCode+curStr+"_");
+            setTimeout(function () {
+                enterText(str, objName, callback);
+                
+            }, enterTextDelay);
+        };
+    }
+
+    var userInfo=[{"token":"e31f5c474861c213ef70b3b8acabf576","name":"刘丹","startDate":"1982-05-27"}];
+
+    var autoEnterArr=[];
+    //生日快乐！谢谢你这么多年伴我一起度过快乐的日子。谢谢你给了我一个聪明可爱的儿子。谢谢你为咱们大家和小家所付出的一切。我永远爱你和我们的儿子
+    var msgArr=["亲爱的同学：","此刻迎来口袋购物周年纪念日，","祝你生日快乐！","谢谢你这么多年伴我一起度过快乐的日子","谢谢你给了我一个聪明可爱的儿子","谢谢你为咱们大家和小家所付出的一切","我永远爱你和我们的儿子！","卢勇福祝刘丹生日快乐！！！"];
+    var getDay=function (diffTime) {
+        var day=parseInt(diffTime/24/60/60/1000);
+        return day;
+    }
+    var getHour=function (diffTime) {
+        var hour=parseInt(diffTime%(24*60*60*1000)/60/60/1000);
+        return hour;
+    }    
+    var getMinite=function (diffTime) {
+        var minite=parseInt(diffTime%(24*60*60*1000)%(60*60*1000)/1000/60);
+        return minite;
+    }
+    var companyStart=new Date("2011-05-19");
+    var companyCurDate=new Date();
+    var comDiffTime=companyCurDate-companyStart;
+    var comDayString=getDay(comDiffTime)!=0?getDay(comDiffTime)+"天":"";
+    var comHourString=getHour(comDiffTime)!=0?getHour(comDiffTime)+"小时":"";
+    var comMiniteString=getMinite(comDiffTime)!=0?getMinite(comDiffTime)+"分":"";
+
+    msgArr[1]="此刻公司已走过"+comDayString+comHourString+comMiniteString+"，";
+
+    var getCurUser=function () {
+        var tempToken='e31f5c474861c213ef70b3b8acabf576';
+        $.each(userInfo, function (i,n) {
+            if (n.token == tempToken) {
+                var inTime=n.startDate.split("-");
+                inTime[1]=inTime[1].length<2?"0"+inTime[1]:inTime[1];
+                inTime[2]=inTime[2].length<2?"0"+inTime[2]:inTime[2];
+                var inTimeString=inTime.join("-");
+
+                var startDate=new Date(inTimeString);
+                var endDate=new Date();
+                //alert(startDate.valueOf())
+                //alert(endDate.valueOf())
+                var diffTime=endDate-startDate;
+                var dayString=getDay(diffTime)!=0?getDay(diffTime)+"天":"";
+                var hourString=getHour(diffTime)!=0?getHour(diffTime)+"小时":"";
+                var miniteString=getMinite(diffTime)!=0?getMinite(diffTime)+"分":"";
+                msgArr[0]="亲爱的"+n.name+"同学：";
+                msgArr[1]="此刻是你出生的第"+dayString+"，";
+            };
+        })
+    }
+    getCurUser();
+
+    var queue=function () {
+        autoEnterArr.shift();
+        autoEnterArr[0] && autoEnterArr[0]();
+    }
+
+    $.each(msgArr, function (i,n) {
+        var tempClass='line'+(i+1);
+        autoEnterArr.push(function () {
+            enterText(n, tempClass, queue);
+        })
+    })
+
+    //fire
+    var FireLimt=4;
+    var FireMaxWidth=parseInt($('#playFire').css('background-size').split(" ")[0].replace('px',''));
+    var FireStep=parseInt(FireMaxWidth/FireLimt);    
+    var FireSpeed=80;
+
+    autoEnterArr.push(function () {
+        $('.footer').css({'display':'block'})
+        $('.cake').addClass('inFooter').css({'width':'100%','height':'100%','margin-left':'-50%','margin-top':'-50%'});
+
+        setTimeout(function () {
+            $('#playFire').css({'display':'block'});
+            setInterval(function () {
+                var tempX=parseInt($('#playFire').css('background-position').split(" ")[0].replace('px',''));
+                tempX=tempX-FireStep;
+                if (Math.abs(tempX) >= FireMaxWidth) {
+                    tempX=0;
+                };
+                $('#playFire').css({'background-position':tempX+'px 0'});
+            }, FireSpeed)
+        }, 800)
+    })
+    autoEnterArr[0]();
+
+}
+//$(function () {
+
+//})
+</script>
+
+
+</body>
+</html>
